@@ -16,6 +16,7 @@ A Node.js backend application that provides user authentication and management f
 - Node.js (v14 or higher)
 - PostgreSQL (local or remote)
 - npm or yarn
+- Docker and Docker Compose (optional)
 
 ## Installation
 
@@ -32,23 +33,24 @@ npm install
 
 3. Create a `.env` file in the root directory with the following variables:
 ```
+NODE_ENV=development
 PORT=3000
-DB_HOST=localhost
+DB_HOST=postgres
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=postgres
 DB_NAME=nodejs_test
 JWT_SECRET=your-super-secret-key-change-in-production
-JWT_EXPIRES_IN=24h
-```
-
-4. Create the database:
-```bash
-createdb nodejs_test
 ```
 
 ## Running the Application
 
+### Using Docker (Recommended)
+```bash
+docker-compose up --build
+```
+
+### Without Docker
 Development mode:
 ```bash
 npm run dev

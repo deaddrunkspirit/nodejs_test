@@ -1,7 +1,5 @@
 import { Repository } from 'typeorm';
-import { AppDataSource } from '../config/database';
 import { User } from '../models/user.model';
-import { QueryFailedError } from 'typeorm';
 
 export class UserRepository {
     constructor(private repository: Repository<User>) {}

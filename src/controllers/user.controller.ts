@@ -24,11 +24,7 @@ export class UserController {
 
     async getUser(req: Request, res: Response): Promise<void> {
         try {
-            const userId = parseInt(req.params.id, 10);
-            if (isNaN(userId)) {
-                res.status(400).json({ message: 'Invalid user ID' });
-                return;
-            }
+            const userId = req.params.id;
             const user = await this.userService.getUserById(userId);
             if (!user) {
                 res.status(404).json({ message: 'User not found' });
@@ -47,11 +43,7 @@ export class UserController {
 
     async updateUser(req: Request, res: Response): Promise<void> {
         try {
-            const userId = parseInt(req.params.id, 10);
-            if (isNaN(userId)) {
-                res.status(400).json({ message: 'Invalid user ID' });
-                return;
-            }
+            const userId = req.params.id;
             const user = await this.userService.updateUser(userId, req.body);
             if (!user) {
                 res.status(404).json({ message: 'User not found' });
@@ -70,11 +62,7 @@ export class UserController {
 
     async deleteUser(req: Request, res: Response): Promise<void> {
         try {
-            const userId = parseInt(req.params.id, 10);
-            if (isNaN(userId)) {
-                res.status(400).json({ message: 'Invalid user ID' });
-                return;
-            }
+            const userId = req.params.id;
             await this.userService.deleteUser(userId);
             res.status(204).send();
         } catch (error: unknown) {

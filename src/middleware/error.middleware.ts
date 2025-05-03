@@ -4,9 +4,9 @@ import { QueryFailedError } from 'typeorm';
 
 export const errorHandler = (
   error: any,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   if (error instanceof JsonWebTokenError || error instanceof TokenExpiredError) {
     return res.status(401).json({

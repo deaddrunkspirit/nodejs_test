@@ -33,6 +33,7 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - DB_NAME=nodejs_test
+      - JWT_SECRET=your-super-secret-key-change-in-production
     ports:
       - "3000:3000"
     volumes:

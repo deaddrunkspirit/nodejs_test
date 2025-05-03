@@ -24,7 +24,7 @@ export const authMiddleware = (userService: UserService) => {
     const token = authHeader.replace('Bearer ', '');
 
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-super-secret-key-change-in-production') as { userId: number };
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-super-secret-key-change-in-production') as { userId: string };
       const user = await userService.getUserById(decoded.userId);
 
       if (!user) {
