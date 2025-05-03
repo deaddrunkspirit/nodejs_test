@@ -9,7 +9,6 @@ import { errorHandler } from './middleware/error.middleware';
 
 const app = express();
 
-// Initialize database connection only in non-test environment
 if (process.env.NODE_ENV !== 'test') {
     AppDataSource.initialize()
         .then(() => {
@@ -21,18 +20,14 @@ if (process.env.NODE_ENV !== 'test') {
         });
 }
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Routes
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 
-// Error handling
 app.use(errorHandler);
 
 export default app; 

@@ -16,13 +16,11 @@ async function createTestDatabase() {
         await client.connect();
         console.log('Connected to PostgreSQL');
         
-        // Check if test database exists
         const result = await client.query(
             "SELECT 1 FROM pg_database WHERE datname = 'test'"
         );
         
         if (result.rows.length > 0) {
-            // Disconnect all connections to the test database
             await client.query(`
                 SELECT pg_terminate_backend(pg_stat_activity.pid)
                 FROM pg_stat_activity
@@ -30,16 +28,13 @@ async function createTestDatabase() {
                 AND pid <> pg_backend_pid();
             `);
             
-            // Drop test database
             await client.query('DROP DATABASE IF EXISTS test');
             console.log('Existing test database dropped');
         }
         
-        // Create test database
         await client.query('CREATE DATABASE test');
         console.log('Test database created successfully');
         
-        // Create test database client
         const testClient = new Client({
             host: process.env.DB_HOST || 'localhost',
             port: parseInt(process.env.DB_PORT || '5432'),
@@ -51,7 +46,6 @@ async function createTestDatabase() {
         await testClient.connect();
         console.log('Connected to test database');
         
-        // Enable UUID extension if needed
         await testClient.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
         console.log('UUID extension enabled');
         
