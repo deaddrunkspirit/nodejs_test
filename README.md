@@ -1,37 +1,35 @@
-# User Authentication API
+# REST API Аутентификации Пользователей
 
-A Node.js backend application that provides user authentication and management functionality.
+## Возможности
 
-## Features
+- Регистрация и вход пользователей
+- Аутентификация на основе JWT
+- Защищенный эндпоинт для получения списка пользователей
+- Документация API через Swagger
+- Интеграция с базой данных PostgreSQL
+- Поддержка TypeScript
 
-- User registration and login
-- JWT-based authentication
-- Protected user listing endpoint
-- Swagger API documentation
-- PostgreSQL database integration
-- TypeScript support
+## Требования
 
-## Prerequisites
+- Node.js (версия 14 или выше)
+- PostgreSQL (локально или удаленно)
+- npm или yarn
+- Docker и Docker Compose (опционально)
 
-- Node.js (v14 or higher)
-- PostgreSQL (local or remote)
-- npm or yarn
-- Docker and Docker Compose (optional)
+## Установка
 
-## Installation
-
-1. Clone the repository:
+1. Клонируйте репозиторий:
 ```bash
 git clone <repository-url>
 cd <repository-name>
 ```
 
-2. Install dependencies:
+2. Установите зависимости:
 ```bash
 npm install
 ```
 
-3. Create a `.env` file in the root directory with the following variables:
+3. Создайте файл `.env` в корневой директории со следующими переменными:
 ```
 NODE_ENV=development
 PORT=3000
@@ -43,64 +41,47 @@ DB_NAME=nodejs_test
 JWT_SECRET=your-super-secret-key-change-in-production
 ```
 
-## Running the Application
+## Запуск Приложения
 
-### Using Docker (Recommended)
+### Использование Docker (Рекомендуется)
 ```bash
 docker-compose up --build
 ```
 
-### Without Docker
-Development mode:
+### Без Docker
+Режим разработки:
 ```bash
 npm run dev
 ```
 
-Production mode:
+Режим продакшн:
 ```bash
 npm run build
 npm start
 ```
 
-## API Documentation
+## Документация API
 
-Once the server is running, you can access the Swagger documentation at:
+После запуска сервера документацию Swagger можно найти по адресу:
 ```
 http://localhost:3000/api-docs
 ```
 
-## API Endpoints
+## Эндпоинты API
 
-### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login and get JWT token
+### Аутентификация
+- `POST /api/auth/register` - Регистрация нового пользователя
+- `POST /api/auth/login` - Вход и получение JWT токена
 
-### Users
-- `GET /api/users` - Get list of users (requires authentication)
-- `GET /api/users/:id` - Get user by ID (requires authentication)
-- `PUT /api/users/:id` - Update user (requires authentication)
-- `DELETE /api/users/:id` - Delete user (requires authentication)
+### Пользователи
+- `GET /api/users` - Получение списка пользователей (требуется аутентификация)
+- `GET /api/users/:id` - Получение пользователя по ID (требуется аутентификация)
+- `PUT /api/users/:id` - Обновление пользователя (требуется аутентификация)
+- `DELETE /api/users/:id` - Удаление пользователя (требуется аутентификация)
 
-## Testing
+## Тестирование
 
-To run tests:
+Для запуска тестов:
 ```bash
 npm test
 ```
-
-This will:
-1. Create a test database
-2. Run all tests
-3. Drop the test database
-
-## Security
-
-- Passwords are hashed using bcrypt
-- JWT tokens are used for authentication
-- Protected routes require valid JWT token
-- Error handling middleware for consistent error responses
-- PostgreSQL prepared statements for SQL injection prevention
-
-## License
-
-ISC 
