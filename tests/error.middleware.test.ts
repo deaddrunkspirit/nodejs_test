@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-import { QueryFailedError } from 'typeorm';
 import { errorHandler } from '../src/middleware/error.middleware';
 import { createMockRequest, createMockResponse } from './helpers/test-utils';
+import { MockQueryFailedError } from './helpers/mock-errors';
 
 describe('Error Middleware', () => {
   let mockRequest: Partial<Request>;
@@ -38,9 +38,12 @@ describe('Error Middleware', () => {
   });
 
   it('should handle duplicate key error', () => {
-    const error = new QueryFailedError('duplicate key value violates unique constraint', [], {
-      code: '23505'
-    });
+    const error = new MockQueryFailedError(
+      'duplicate key value violates unique constraint',
+      'query',
+      [],
+      { code: '23505' }
+    );
 
     errorHandler(error, mockRequest as Request, mockResponse as Response, mockNext);
 
@@ -51,22 +54,28 @@ describe('Error Middleware', () => {
   });
 
   it('should handle foreign key constraint error', () => {
-    const error = new QueryFailedError('foreign key violation', [], {
-      code: '23503'
-    });
+    const error = new MockQueryFailedError(
+      'foreign key violation',
+      'query',
+      [],
+      { code: '23503' }
+    );
 
     errorHandler(error, mockRequest as Request, mockResponse as Response, mockNext);
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      message: 'foreign key violation'
+      message: 'Foreign key violation'
     });
   });
 
   it('should handle not null constraint error', () => {
-    const error = new QueryFailedError('not null constraint violation', [], {
-      code: '23502'
-    });
+    const error = new MockQueryFailedError(
+      'not null constraint violation',
+      'query',
+      [],
+      { code: '23502' }
+    );
 
     errorHandler(error, mockRequest as Request, mockResponse as Response, mockNext);
 
@@ -89,7 +98,12 @@ describe('Error Middleware', () => {
   });
 
   it('should handle generic database error', () => {
-    const error = new QueryFailedError('Database error', [], {});
+    const error = new MockQueryFailedError(
+      'Database error',
+      'query',
+      [],
+      {}
+    );
 
     errorHandler(error, mockRequest as Request, mockResponse as Response, mockNext);
 

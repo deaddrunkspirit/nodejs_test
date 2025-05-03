@@ -15,7 +15,7 @@ export const errorHandler = (
   }
 
   if (error instanceof QueryFailedError) {
-    const { code } = error.driverError;
+    const { code } = error.driverError || {};
     
     switch (code) {
       case '23505':
@@ -25,6 +25,10 @@ export const errorHandler = (
       case '23502':
         return res.status(400).json({
           message: 'Not null constraint violation'
+        });
+      case '23503':
+        return res.status(500).json({
+          message: 'Foreign key violation'
         });
       default:
         return res.status(500).json({

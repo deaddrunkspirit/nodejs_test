@@ -1,9 +1,9 @@
 import { UserService } from '../src/services/user.service';
 import { UserRepository } from '../src/repositories/user.repository';
 import { User } from '../src/models/user.model';
-import { QueryFailedError } from 'typeorm';
 import { createMockUser } from './helpers/test-utils';
 import { AppDataSource } from '../src/config/database';
+import { MockQueryFailedError } from './helpers/mock-errors';
 
 // Mock AppDataSource
 jest.mock('../src/config/database', () => ({
@@ -80,7 +80,12 @@ describe('UserService', () => {
 
             mockUserRepository.findByEmail.mockResolvedValue(null);
             mockUserRepository.createUser.mockRejectedValue(
-                new QueryFailedError('violates unique constraint', [], {})
+                new MockQueryFailedError(
+                    'Email already exists',
+                    'query',
+                    [],
+                    { code: '23505' }
+                )
             );
 
             await expect(userService.createUser(userData)).rejects.toThrow('Email already exists');
@@ -94,7 +99,12 @@ describe('UserService', () => {
 
             mockUserRepository.findByEmail.mockResolvedValue(null);
             mockUserRepository.createUser.mockRejectedValue(
-                new QueryFailedError('violates not-null constraint', [], {})
+                new MockQueryFailedError(
+                    'Required fields are missing',
+                    'query',
+                    [],
+                    { code: '23502' }
+                )
             );
 
             await expect(userService.createUser(userData)).rejects.toThrow('Required fields are missing');
@@ -123,7 +133,12 @@ describe('UserService', () => {
 
         it('should handle database error', async () => {
             mockUserRepository.findById.mockRejectedValue(
-                new QueryFailedError('Database error', [], {})
+                new MockQueryFailedError(
+                    'Database error occurred',
+                    'query',
+                    [],
+                    { name: 'Error', message: 'Database error occurred' }
+                )
             );
 
             await expect(userService.getUserById('1')).rejects.toThrow('Database error occurred');
@@ -152,7 +167,12 @@ describe('UserService', () => {
 
         it('should handle database error', async () => {
             mockUserRepository.findByEmail.mockRejectedValue(
-                new QueryFailedError('Database error', [], {})
+                new MockQueryFailedError(
+                    'Database error occurred',
+                    'query',
+                    [],
+                    { name: 'Error', message: 'Database error occurred' }
+                )
             );
 
             await expect(userService.getUserByEmail('test@example.com')).rejects.toThrow('Database error occurred');
@@ -195,7 +215,12 @@ describe('UserService', () => {
 
             mockUserRepository.findByEmail.mockResolvedValue(null);
             mockUserRepository.updateUser.mockRejectedValue(
-                new QueryFailedError('violates unique constraint', [], {})
+                new MockQueryFailedError(
+                    'Email already exists',
+                    'query',
+                    [],
+                    { code: '23505' }
+                )
             );
 
             await expect(userService.updateUser('1', updateData)).rejects.toThrow('Email already exists');
@@ -208,7 +233,12 @@ describe('UserService', () => {
 
             mockUserRepository.findByEmail.mockResolvedValue(null);
             mockUserRepository.updateUser.mockRejectedValue(
-                new QueryFailedError('violates not-null constraint', [], {})
+                new MockQueryFailedError(
+                    'Required fields are missing',
+                    'query',
+                    [],
+                    { code: '23502' }
+                )
             );
 
             await expect(userService.updateUser('1', updateData)).rejects.toThrow('Required fields are missing');
@@ -226,7 +256,12 @@ describe('UserService', () => {
 
         it('should handle database error', async () => {
             mockUserRepository.deleteUser.mockRejectedValue(
-                new QueryFailedError('Database error', [], {})
+                new MockQueryFailedError(
+                    'Database error occurred',
+                    'query',
+                    [],
+                    { name: 'Error', message: 'Database error occurred' }
+                )
             );
 
             await expect(userService.deleteUser('1')).rejects.toThrow('Database error occurred');

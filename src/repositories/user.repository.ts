@@ -4,6 +4,10 @@ import { User } from '../models/user.model';
 export class UserRepository {
     constructor(private repository: Repository<User>) {}
 
+    async findAll(): Promise<User[]> {
+        return this.repository.find();
+    }
+
     async createUser(userData: Partial<User>): Promise<User> {
         const user = this.repository.create(userData);
         return this.repository.save(user);

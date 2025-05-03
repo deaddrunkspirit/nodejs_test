@@ -10,6 +10,17 @@ export class UserService {
         this.userRepository = new UserRepository(AppDataSource.getRepository(User));
     }
 
+    async getAllUsers(): Promise<User[]> {
+        try {
+            return await this.userRepository.findAll();
+        } catch (error) {
+            if (error instanceof QueryFailedError) {
+                throw new Error('Database error occurred');
+            }
+            throw error;
+        }
+    }
+
     async createUser(userData: Partial<User>): Promise<User> {
         try {
             if (!userData.email) {
@@ -35,13 +46,14 @@ export class UserService {
                 }
             }
             if (error instanceof QueryFailedError) {
-                const message = error.message.toLowerCase();
-                if (message.includes('unique constraint') || message.includes('duplicate key')) {
+                const { code } = error.driverError;
+                if (code === '23505') {
                     throw new Error('Email already exists');
                 }
-                if (message.includes('not null') || message.includes('violates not-null constraint')) {
+                if (code === '23502') {
                     throw new Error('Required fields are missing');
                 }
+                throw new Error('Database error occurred');
             }
             throw error;
         }
@@ -84,13 +96,14 @@ export class UserService {
                 throw error;
             }
             if (error instanceof QueryFailedError) {
-                const message = error.message.toLowerCase();
-                if (message.includes('unique constraint') || message.includes('duplicate key')) {
+                const { code } = error.driverError;
+                if (code === '23505') {
                     throw new Error('Email already exists');
                 }
-                if (message.includes('not null') || message.includes('violates not-null constraint')) {
+                if (code === '23502') {
                     throw new Error('Required fields are missing');
                 }
+                throw new Error('Database error occurred');
             }
             throw error;
         }
